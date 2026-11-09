@@ -14,19 +14,19 @@ export const megaMendung: Motif = {
   meaning: 'Overcast clouds that bring rain: patience and a cool head under pressure.',
   render({ rng, pal, scale, width, height }) {
     const layers = rng.int(5, 7);
-    const size = scale * 1.6;
+    const size = scale * 2.1;
     const cols = Math.ceil(width / size) + 1;
     const rows = Math.ceil(height / (size * 0.75)) + 1;
     const clouds: { cx: number; cy: number; rx: number; ry: number; lobes: number; rot: number }[] = [];
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        if (rng.chance(0.15)) continue;
+        if (rng.chance(0.38)) continue;
         clouds.push({
           cx: c * size + (r % 2 ? size / 2 : 0) + rng.range(-0.2, 0.2) * size,
           cy: r * size * 0.75 + rng.range(-0.15, 0.15) * size,
-          rx: size * rng.range(0.5, 0.75),
-          ry: size * rng.range(0.32, 0.45),
+          rx: size * rng.range(0.45, 0.7),
+          ry: size * rng.range(0.28, 0.4),
           lobes: rng.int(6, 10),
           rot: rng.range(0, Math.PI * 2),
         });

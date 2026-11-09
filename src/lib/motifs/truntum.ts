@@ -1,3 +1,4 @@
+import { onBg } from '../palettes';
 import { el, f, ring } from '../svg';
 import type { Motif } from './types';
 
@@ -16,17 +17,21 @@ export const truntum: Motif = {
     const sw = Math.max(0.8, scale * 0.02);
     const petals = rng.int(5, 8);
     const filled = rng.chance(0.4);
+    const line = onBg(pal);
     let out = '';
 
     const flower = (cx: number, cy: number, r: number, rot: number) => {
       let g = '';
-      for (const [x, y] of ring(cx, cy, r * 0.55, petals, rot)) {
-        g += el('circle', {
-          cx: x, cy: y, r: r * 0.36,
-          fill: filled ? pal.light : 'none', stroke: pal.light, 'stroke-width': sw,
-        });
+      // pointed, radial petals like a jasmine star
+      for (let k = 0; k < petals; k++) {
+        const a = rot + (k / petals) * 360;
+        g += `<g transform="rotate(${f(a)} ${f(cx)} ${f(cy)})">` +
+          el('ellipse', {
+            cx, cy: cy - r * 0.55, rx: r * (0.62 / petals) * 2.2, ry: r * 0.42,
+            fill: filled ? line : 'none', stroke: line, 'stroke-width': sw,
+          }) + '</g>';
       }
-      g += el('circle', { cx, cy, r: r * 0.22, fill: pal.accent, stroke: pal.light, 'stroke-width': sw * 0.6 });
+      g += el('circle', { cx, cy, r: r * 0.2, fill: pal.accent, stroke: line, 'stroke-width': sw * 0.8 });
       return g;
     };
 
@@ -35,10 +40,10 @@ export const truntum: Motif = {
         const cx = (i + 0.5) * scale + rng.range(-0.12, 0.12) * scale;
         const cy = (j + 0.5) * scale + rng.range(-0.12, 0.12) * scale;
         const r = scale * rng.range(0.24, 0.32);
-        out += flower(cx, cy, r, rng.range(0, Math.PI));
+        out += flower(cx, cy, r, rng.range(0, 90));
         // tiny "cecek" dots — the dotted fill typical of hand-drawn batik
         for (const [x, y] of ring(cx, cy, r * 1.35, rng.int(3, 6), rng.range(0, 6))) {
-          out += el('circle', { cx: x, cy: y, r: sw * 0.9, fill: pal.light, opacity: 0.8 });
+          out += el('circle', { cx: x, cy: y, r: sw * 0.9, fill: line, opacity: 0.8 });
         }
       }
     }

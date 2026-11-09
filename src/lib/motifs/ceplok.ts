@@ -1,3 +1,4 @@
+import { onBg } from '../palettes';
 import { el, f, ring } from '../svg';
 import type { Motif } from './types';
 
@@ -13,13 +14,14 @@ export const ceplok: Motif = {
     const petalCount = rng.pick([4, 8, 8, 12]);
     const starFill = rng.chance(0.5);
     const ringed = rng.chance(0.6);
+    const line = onBg(pal);
     let out = '';
 
     // 8-point star from two rotated squares
     const sq = (rot: number, r: number) =>
       ring(c, c, r, 4, rot).map(([x, y]) => `${f(x)},${f(y)}`).join(' ');
-    out += el('polygon', { points: sq(Math.PI / 4, t * 0.42), fill: starFill ? pal.ink : 'none', stroke: pal.light, 'stroke-width': sw });
-    out += el('polygon', { points: sq(0, t * 0.42), fill: starFill ? pal.ink : 'none', stroke: pal.light, 'stroke-width': sw });
+    out += el('polygon', { points: sq(Math.PI / 4, t * 0.42), fill: starFill ? pal.ink : 'none', stroke: starFill ? pal.light : line, 'stroke-width': sw });
+    out += el('polygon', { points: sq(0, t * 0.42), fill: starFill ? pal.ink : 'none', stroke: starFill ? pal.light : line, 'stroke-width': sw });
 
     if (ringed) out += el('circle', { cx: c, cy: c, r: t * 0.27, fill: pal.bg, stroke: pal.accent, 'stroke-width': sw * 1.4 });
 
@@ -28,7 +30,7 @@ export const ceplok: Motif = {
     for (let i = 0; i < petalCount; i++) {
       const a = (i / petalCount) * 360;
       out += `<g transform="rotate(${f(a)} ${f(c)} ${f(c)})">` +
-        el('ellipse', { cx: c, cy: c - pr * 0.62, rx: pr * (petalCount > 8 ? 0.16 : 0.26), ry: pr * 0.55, fill: pal.light, opacity: 0.92 }) +
+        el('ellipse', { cx: c, cy: c - pr * 0.62, rx: pr * (petalCount > 8 ? 0.16 : 0.26), ry: pr * 0.55, fill: ringed || !starFill ? line : pal.light, opacity: 0.92 }) +
         '</g>';
     }
     out += el('circle', { cx: c, cy: c, r: t * 0.055, fill: pal.accent, stroke: pal.light, 'stroke-width': sw });
@@ -41,7 +43,7 @@ export const ceplok: Motif = {
     // edge midpoints: small diamonds
     for (const [x, y] of [[c, 0], [0, c], [t, c], [c, t]]) {
       const d = t * 0.045;
-      out += el('polygon', { points: `${f(x - d)},${f(y)} ${f(x)},${f(y - d)} ${f(x + d)},${f(y)} ${f(x)},${f(y + d)}`, fill: pal.light });
+      out += el('polygon', { points: `${f(x - d)},${f(y)} ${f(x)},${f(y - d)} ${f(x + d)},${f(y)} ${f(x)},${f(y + d)}`, fill: line });
     }
 
     const id = `${uid}-ceplok`;

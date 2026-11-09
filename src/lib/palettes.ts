@@ -57,3 +57,8 @@ export function contrast(a: string, b: string): number {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
   return (hi + 0.05) / (lo + 0.05);
 }
+
+/** Colour for lines drawn directly on the cloth: light if it reads, else the dye. */
+export function onBg(p: Palette): string {
+  return contrast(p.light, p.bg) >= 2 ? p.light : p.ink;
+}

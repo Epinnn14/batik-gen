@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrast, mix, PALETTES } from '../src/lib/palettes';
+import { contrast, mix, onBg, PALETTES } from '../src/lib/palettes';
 import { DEFAULT_STATE, decodeState, encodeState, SCALE_MAX, SCALE_MIN } from '../src/lib/state';
 
 describe('palettes', () => {
@@ -15,6 +15,10 @@ describe('palettes', () => {
       expect(contrast(p.light, p.bg), p.id).toBeGreaterThanOrEqual(1.05);
       expect(contrast(p.light, p.ink), p.id).toBeGreaterThanOrEqual(3);
     }
+  });
+
+  it('onBg always picks a line colour that reads on the cloth', () => {
+    for (const p of PALETTES) expect(contrast(onBg(p), p.bg), p.id).toBeGreaterThanOrEqual(2);
   });
 
   it('palette ids are unique hex colours', () => {

@@ -1,3 +1,4 @@
+import { onBg } from '../palettes';
 import { el, f } from '../svg';
 import type { Motif } from './types';
 
@@ -55,11 +56,11 @@ export const parang: Motif = {
     for (const mx of [0, w]) {
       out += el('polygon', {
         points: `${f(mx - mw)},${f(gy)} ${f(mx)},${f(gy - mh)} ${f(mx + mw)},${f(gy)} ${f(mx)},${f(gy + mh)}`,
-        fill: pal.accent, stroke: pal.light, 'stroke-width': sw * 0.6,
+        fill: pal.accent, stroke: onBg(pal), 'stroke-width': sw * 0.6,
       });
       out += el('polygon', {
         points: `${f(mx - mw)},${f(gy - h)} ${f(mx)},${f(gy - h - mh)} ${f(mx + mw)},${f(gy - h)} ${f(mx)},${f(gy - h + mh)}`,
-        fill: pal.accent, stroke: pal.light, 'stroke-width': sw * 0.6,
+        fill: pal.accent, stroke: onBg(pal), 'stroke-width': sw * 0.6,
       });
     }
 
