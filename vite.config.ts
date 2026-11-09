@@ -1,7 +1,8 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+// BASE_PATH is set by the GitHub Pages workflow (e.g. /batik-gen/)
 export default defineConfig({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [svelte()],
 })
