@@ -1,47 +1,80 @@
-# Svelte + TS + Vite
+# batik·gen
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+**Generative Indonesian batik, drawn with code instead of a canting.**
 
-## Recommended IDE Setup
+Pick a traditional motif, a dye palette and a seed — batik-gen draws a seamless,
+print-ready cloth as pure SVG. Same seed, same cloth: every design is a shareable link.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+**Live demo:** https://epinnn14.github.io/batik-gen/
 
-## Need an official Svelte framework?
+![batik-gen app](docs/app.png)
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Motifs
 
-## Technical considerations
+| | Motif | Origin | Meaning |
+|---|---|---|---|
+| ![Kawung](docs/kawung.png) | **Kawung** | Yogyakarta & Surakarta courts | The aren palm fruit — purity and order |
+| ![Parang](docs/parang.png) | **Parang** | Mataram kingdom | Waves against rock — perseverance |
+| ![Truntum](docs/truntum.png) | **Truntum** | Surakarta, 18th century | Love that blooms again |
+| ![Ceplok](docs/ceplok.png) | **Ceplok** | Yogyakarta | Balance of the four directions |
+| ![Mega Mendung](docs/megamendung.png) | **Mega Mendung** | Trusmi, Cirebon | Rain clouds — patience under pressure |
 
-**Why use this over SvelteKit?**
+## Features
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+- **5 motifs × 6 palettes** — Sogan, Nila (indigo), Pesisir, Cirebon, Lasem red and Malam (night & gold).
+- **Seeded & deterministic** — a tiny `mulberry32` PRNG seeded by an FNV-1a hash; the seed changes proportions, ornaments (*isen*), petal counts and cloud layouts.
+- **Wax cracks (*remukan*)** — optional random-walk veins that imitate dye seeping through cracked wax, on their own RNG stream so toggling them never changes the motif.
+- **Seamless tiles** — Kawung, Parang, Truntum and Ceplok are SVG `<pattern>`s whose edges join perfectly; Mega Mendung is a full-canvas cloud field with 5–7 colour gradations.
+- **Export** SVG (vector, infinitely scalable) or PNG in Desktop, Phone, Square or GitHub-banner sizes.
+- **Shareable URL state** — everything lives in the hash, validated and clamped on load.
+- **Keyboard**: `R` new seed · `S` surprise me · `←` `→` switch motif.
+- **No runtime dependencies** — the generator is ~600 lines of plain TypeScript; Svelte 5 only drives the UI.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+## Stack
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+[Svelte 5](https://svelte.dev) (runes) · TypeScript · Vite · Vitest · GitHub Actions → GitHub Pages
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+```
+src/
+├── lib/
+│   ├── rng.ts          seeded PRNG + friendly random seeds
+│   ├── palettes.ts     dye palettes, colour mixing, WCAG contrast
+│   ├── svg.ts          tiny SVG string helpers
+│   ├── motifs/         one generator per motif (pure functions → SVG markup)
+│   ├── crackle.ts      wax-crack overlay
+│   ├── render.ts       renderSvg(options) → standalone SVG document
+│   ├── state.ts        URL hash <-> app state
+│   └── export.ts       SVG / PNG download (browser only)
+└── App.svelte          the control panel and preview
+tests/                  Vitest: determinism, SVG well-formedness, palettes, URL state
+```
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+## Run locally
 
-**Why include `.vscode/extensions.json`?**
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm test         # 31 tests
+npm run build    # static site in dist/
+```
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+## Use the generator in your own code
 
 ```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+import { renderSvg } from './src/lib/render';
+
+const svg = renderSvg({
+  motif: 'parang', palette: 'nila', seed: 'lorod-2210',
+  scale: 120, width: 1280, height: 640, crackle: true,
+});
 ```
+
+## Notes
+
+The motifs are simplified, geometric interpretations made for fun and learning —
+not reproductions of any specific cloth. Real batik tulis is drawn by hand with hot
+wax and can take months; go buy some. 🇮🇩
+
+## License
+
+MIT © Alessandro Kevin Aprilio
