@@ -1,6 +1,6 @@
-import { mix } from '../palettes';
-import { el, f } from '../svg';
-import type { Motif } from './types';
+import { mix } from '../../palettes';
+import { el, f } from '../../svg';
+import type { Motif } from '../types';
 
 /**
  * Mega Mendung — layered clouds whose colour steps from dark to light,
@@ -10,8 +10,11 @@ import type { Motif } from './types';
 export const megaMendung: Motif = {
   id: 'megamendung',
   name: 'Mega Mendung',
+  island: 'jawa',
+  region: 'Cirebon, West Java',
   origin: 'Trusmi, Cirebon (West Java), with Chinese cloud-motif influence',
   meaning: 'Overcast clouds that bring rain: patience and a cool head under pressure.',
+  palette: 'cirebon',
   render({ rng, pal, scale, width, height }) {
     const layers = rng.int(5, 7);
     const size = scale * 2.1;

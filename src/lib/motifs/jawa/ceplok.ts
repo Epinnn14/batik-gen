@@ -1,13 +1,16 @@
-import { onBg } from '../palettes';
-import { el, f, ring } from '../svg';
-import type { Motif } from './types';
+import { onBg } from '../../palettes';
+import { el, f, ring } from '../../svg';
+import type { Motif } from '../types';
 
 /** Ceplok — geometric rosettes inside a square grid (8-fold symmetry). */
 export const ceplok: Motif = {
   id: 'ceplok',
   name: 'Ceplok',
+  island: 'jawa',
+  region: 'Yogyakarta',
   origin: 'Yogyakarta — a large family of grid-based "ceplokan" patterns',
   meaning: 'Balance of the four directions around a centre (keblat papat lima pancer).',
+  palette: 'nila',
   render({ rng, pal, scale: t, uid }) {
     const c = t / 2;
     const sw = Math.max(1, t * 0.014);

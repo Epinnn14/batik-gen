@@ -1,5 +1,5 @@
-import { el, f, ring } from '../svg';
-import type { Motif } from './types';
+import { el, f, ring } from '../../svg';
+import type { Motif } from '../types';
 
 /**
  * Kawung — four ovals (the cut aren palm fruit) meeting at a point.
@@ -9,8 +9,11 @@ import type { Motif } from './types';
 export const kawung: Motif = {
   id: 'kawung',
   name: 'Kawung',
+  island: 'jawa',
+  region: 'Yogyakarta & Surakarta',
   origin: 'Central Java (Yogyakarta & Surakarta courts), one of the oldest batik patterns',
   meaning: 'The aren fruit: purity, order and the hope that one stays useful to others.',
+  palette: 'sogan',
   render({ rng, pal, scale: t, uid }) {
     const rx = t * rng.range(0.3, 0.345);
     const ry = t * rng.range(0.13, 0.19);

@@ -1,14 +1,29 @@
-import { ceplok } from './ceplok';
-import { kawung } from './kawung';
-import { megaMendung } from './megamendung';
-import { parang } from './parang';
-import { truntum } from './truntum';
+import { ISLANDS, type IslandId } from './islands';
+import { JAWA } from './jawa';
 import type { Motif } from './types';
 
 export type { Motif, MotifContext } from './types';
+export { getIsland, ISLANDS, type Island, type IslandId } from './islands';
 
-export const MOTIFS: readonly Motif[] = [kawung, parang, truntum, ceplok, megaMendung];
+/** Motifs per island, one folder each. */
+export const MOTIFS_BY_ISLAND: Readonly<Record<IslandId, readonly Motif[]>> = {
+  sumatra: [],
+  jawa: JAWA,
+  kalimantan: [],
+  sulawesi: [],
+  'bali-nusa-tenggara': [],
+  maluku: [],
+  papua: [],
+};
+
+/** Every motif, west to east. */
+export const MOTIFS: readonly Motif[] = ISLANDS.flatMap((i) => MOTIFS_BY_ISLAND[i.id]);
+
+/** Default motif (and fallback for unknown ids): Kawung. */
+export const DEFAULT_MOTIF = 'kawung';
 
 export function getMotif(id: string): Motif {
-  return MOTIFS.find((m) => m.id === id) ?? MOTIFS[0];
+  return (
+    MOTIFS.find((m) => m.id === id) ?? (MOTIFS.find((m) => m.id === DEFAULT_MOTIF) as Motif)
+  );
 }

@@ -1,6 +1,6 @@
-import { onBg } from '../palettes';
-import { el, f, ring } from '../svg';
-import type { Motif } from './types';
+import { onBg } from '../../palettes';
+import { el, f, ring } from '../../svg';
+import type { Motif } from '../types';
 
 /**
  * Truntum — small jasmine-like star flowers scattered over a dark cloth.
@@ -9,8 +9,11 @@ import type { Motif } from './types';
 export const truntum: Motif = {
   id: 'truntum',
   name: 'Truntum',
+  island: 'jawa',
+  region: 'Surakarta',
   origin: 'Surakarta, attributed to Queen Kencana (Kasunanan) in the 18th century',
   meaning: '"Tumaruntum" — love that blooms again; worn by parents at a wedding.',
+  palette: 'malam',
   render({ rng, pal, scale, uid }) {
     const cells = 3;
     const t = scale * cells;

@@ -1,6 +1,6 @@
-import { onBg } from '../palettes';
-import { el, f } from '../svg';
-import type { Motif } from './types';
+import { onBg } from '../../palettes';
+import { el, f } from '../../svg';
+import type { Motif } from '../types';
 
 /**
  * Parang — diagonal "knife" bands with wavy edges and curls, separated by
@@ -10,8 +10,11 @@ import type { Motif } from './types';
 export const parang: Motif = {
   id: 'parang',
   name: 'Parang',
+  island: 'jawa',
+  region: 'Yogyakarta & Surakarta',
   origin: 'Mataram kingdom, Central Java — once reserved for royalty',
   meaning: 'Waves that never stop hitting the rock: perseverance and continuous struggle.',
+  palette: 'sogan',
   render({ rng, pal, scale, uid }) {
     const w = scale;
     const h = scale * rng.range(0.7, 0.9);
