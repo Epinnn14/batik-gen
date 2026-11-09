@@ -1,6 +1,9 @@
+import { BALI_NUSA_TENGGARA } from './bali-nusa-tenggara';
 import { ISLANDS, type IslandId } from './islands';
 import { JAWA } from './jawa';
 import { KALIMANTAN } from './kalimantan';
+import { MALUKU } from './maluku';
+import { PAPUA } from './papua';
 import { SULAWESI } from './sulawesi';
 import { SUMATRA } from './sumatra';
 import type { Motif } from './types';
@@ -14,9 +17,9 @@ export const MOTIFS_BY_ISLAND: Readonly<Record<IslandId, readonly Motif[]>> = {
   jawa: JAWA,
   kalimantan: KALIMANTAN,
   sulawesi: SULAWESI,
-  'bali-nusa-tenggara': [],
-  maluku: [],
-  papua: [],
+  'bali-nusa-tenggara': BALI_NUSA_TENGGARA,
+  maluku: MALUKU,
+  papua: PAPUA,
 };
 
 /** Every motif, west to east. */

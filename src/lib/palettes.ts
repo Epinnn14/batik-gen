@@ -29,6 +29,12 @@ export const PALETTES: readonly Palette[] = [
     bg: '#3b1f4a', ink: '#2f8f5b', light: '#f6e7b0', accent: '#e0533d' },
   { id: 'toraja', name: 'Toraja', note: 'The four carving colours of Toraja: black, red, yellow, white',
     bg: '#1a1412', ink: '#9c2a1d', light: '#efe2c4', accent: '#d9a21b' },
+  { id: 'poleng', name: 'Poleng', note: 'Black, white and grey of the Balinese poleng cloth',
+    bg: '#cfcac0', ink: '#1c1c1c', light: '#f4f1e8', accent: '#77736b' },
+  { id: 'laut', name: 'Laut Banda', note: 'Banda sea teal with nutmeg-mace red',
+    bg: '#0f3b45', ink: '#c2452d', light: '#f1e6cf', accent: '#e7b04a' },
+  { id: 'tanah', name: 'Tanah Papua', note: 'Red ochre, lime white and charcoal of Papuan bark painting',
+    bg: '#e7d3b0', ink: '#7a2e17', light: '#f8efdc', accent: '#1e1a16' },
 ];
 
 export function getPalette(id: string): Palette {
