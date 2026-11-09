@@ -24,7 +24,7 @@ export const PALETTES: readonly Palette[] = [
   { id: 'lasem', name: 'Lasem', note: '"Abang getih pitik" — chicken-blood red of Lasem',
     bg: '#5e0f12', ink: '#b3262b', light: '#f5e3c3', accent: '#1f1a17' },
   { id: 'malam', name: 'Malam', note: 'Night cloth with golden prada leaf',
-    bg: '#121212', ink: '#3a332a', light: '#e0c27a', accent: '#b8862b' },
+    bg: '#121212', ink: '#4f4130', light: '#e0c27a', accent: '#b8862b' },
 ];
 
 export function getPalette(id: string): Palette {
