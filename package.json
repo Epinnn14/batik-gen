@@ -1,7 +1,7 @@
 {
   "name": "batik-gen",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,5 +20,5 @@
     "vite": "^8.3.6",
     "vitest": "^5.1.0"
   },
-  "description": "Generative Indonesian batik motifs in the browser (Svelte 5)"
+  "description": "Generative Indonesian batik motifs from Sumatra to Papua, in the browser (Svelte 5)"
 }
