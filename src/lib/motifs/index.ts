@@ -1,5 +1,7 @@
 import { ISLANDS, type IslandId } from './islands';
 import { JAWA } from './jawa';
+import { KALIMANTAN } from './kalimantan';
+import { SULAWESI } from './sulawesi';
 import { SUMATRA } from './sumatra';
 import type { Motif } from './types';
 
@@ -10,8 +12,8 @@ export { getIsland, ISLANDS, type Island, type IslandId } from './islands';
 export const MOTIFS_BY_ISLAND: Readonly<Record<IslandId, readonly Motif[]>> = {
   sumatra: SUMATRA,
   jawa: JAWA,
-  kalimantan: [],
-  sulawesi: [],
+  kalimantan: KALIMANTAN,
+  sulawesi: SULAWESI,
   'bali-nusa-tenggara': [],
   maluku: [],
   papua: [],
