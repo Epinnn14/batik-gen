@@ -1,6 +1,6 @@
 <script lang="ts">
   import { downloadSvg, download, fileName, svgToPng } from './lib/export';
-  import { getMotif, MOTIFS } from './lib/motifs';
+  import { getIsland, getMotif, ISLANDS, MOTIFS, MOTIFS_BY_ISLAND, type IslandId } from './lib/motifs';
   import { getPalette, PALETTES } from './lib/palettes';
   import { renderSvg } from './lib/render';
   import { randomSeed } from './lib/rng';
@@ -9,13 +9,17 @@
   let st: AppState = $state(decodeState(location.hash));
   let toast = $state('');
   let busy = $state(false);
+  /** island filter for the motif picker; 'all' shows every motif */
+  let island: IslandId | 'all' = $state('all');
 
   const size = $derived(getSize(st.size));
   const motif = $derived(getMotif(st.motif));
   const palette = $derived(getPalette(st.palette));
   const svg = $derived(renderSvg({ ...st, width: size.width, height: size.height, uid: 'main' }));
+  const shown = $derived(island === 'all' ? MOTIFS : MOTIFS_BY_ISLAND[island]);
+  const suggested = $derived(motif.palette ? getPalette(motif.palette) : undefined);
   const thumbs = $derived(
-    MOTIFS.map((m) => ({
+    shown.map((m) => ({
       m,
       svg: renderSvg({ motif: m.id, palette: st.palette, seed: st.seed, scale: 34, width: 132, height: 84, crackle: false, uid: `t-${m.id}` }),
     })),
@@ -37,9 +41,20 @@
     st.seed = randomSeed();
   }
 
+  function pickIsland(id: IslandId | 'all') {
+    island = id;
+    const list = id === 'all' ? MOTIFS : MOTIFS_BY_ISLAND[id];
+    if (!list.some((m) => m.id === st.motif)) st.motif = list[0].id;
+  }
+
   function surprise() {
-    st.motif = MOTIFS[Math.floor(Math.random() * MOTIFS.length)].id;
-    st.palette = PALETTES[Math.floor(Math.random() * PALETTES.length)].id;
+    const m = shown[Math.floor(Math.random() * shown.length)];
+    st.motif = m.id;
+    // half the time use the motif's own palette, otherwise any palette
+    st.palette =
+      m.palette && Math.random() < 0.5
+        ? m.palette
+        : PALETTES[Math.floor(Math.random() * PALETTES.length)].id;
     st.scale = Math.round(SCALE_MIN + Math.random() * (SCALE_MAX - SCALE_MIN) * 0.6);
     reroll();
   }
@@ -71,9 +86,9 @@
     if (e.key === 'r') reroll();
     if (e.key === 's') surprise();
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      const i = MOTIFS.findIndex((m) => m.id === st.motif);
+      const i = shown.findIndex((m) => m.id === st.motif);
       const d = e.key === 'ArrowRight' ? 1 : -1;
-      st.motif = MOTIFS[(i + d + MOTIFS.length) % MOTIFS.length].id;
+      st.motif = shown[(i + d + shown.length) % shown.length].id;
     }
   }
 </script>
@@ -88,7 +103,15 @@
     </header>
 
     <section>
-      <h2>Motif</h2>
+      <h2>Motif <span class="count">{MOTIFS.length} motifs · {ISLANDS.length} islands</span></h2>
+      <div class="islands" role="group" aria-label="Filter motifs by island">
+        <button class="chip" class:active={island === 'all'} aria-pressed={island === 'all'} onclick={() => pickIsland('all')}>All</button>
+        {#each ISLANDS as i (i.id)}
+          <button class="chip" class:active={island === i.id} aria-pressed={island === i.id} onclick={() => pickIsland(i.id)}>
+            {i.name} <small>{MOTIFS_BY_ISLAND[i.id].length}</small>
+          </button>
+        {/each}
+      </div>
       <div class="motifs">
         {#each thumbs as { m, svg: t } (m.id)}
           <button class="motif" class:active={st.motif === m.id} onclick={() => (st.motif = m.id)} aria-pressed={st.motif === m.id}>
@@ -112,6 +135,11 @@
         {/each}
       </div>
       <p class="note">{palette.note}</p>
+      {#if suggested && suggested.id !== st.palette}
+        <button class="suggest" onclick={() => (st.palette = suggested.id)}>
+          Use {motif.name}'s palette: <b>{suggested.name}</b>
+        </button>
+      {/if}
     </section>
 
     <section class="grid2">
@@ -146,7 +174,7 @@
     </section>
 
     <footer>
-      <kbd>R</kbd> new seed · <kbd>S</kbd> surprise · <kbd>←</kbd><kbd>→</kbd> motif
+      <kbd>R</kbd> new seed · <kbd>S</kbd> surprise · <kbd>←</kbd><kbd>→</kbd> motif{island === 'all' ? '' : ` in ${getIsland(island)?.name}`}
     </footer>
   </aside>
 
@@ -156,6 +184,7 @@
     </figure>
     <article class="info">
       <h3>{motif.name}</h3>
+      <p class="where">{getIsland(motif.island)?.name} · {motif.region}</p>
       <p class="origin">{motif.origin}</p>
       <p>{motif.meaning}</p>
       <p class="meta">{size.width}×{size.height} · seed <code>{st.seed}</code></p>
